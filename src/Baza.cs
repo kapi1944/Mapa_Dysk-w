@@ -6,6 +6,36 @@ using System.Text;
 
 namespace MapaDyskow {
 public sealed class Baza : IDisposable {
+    public static void UtworzPustyIndeks(string sciezka){
+        System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(sciezka));
+        using(var baza=new Baza(sciezka,true)){
+            baza.Wykonaj("BEGIN IMMEDIATE");
+            try{
+                foreach(string sql in new[]{
+                    "CREATE TABLE pliki(id INTEGER PRIMARY KEY,sciezka TEXT UNIQUE,folder TEXT,rozmiar INTEGER,zmiana REAL,typ TEXT,atrybuty INTEGER,urzadzenie TEXT,tozsamosc TEXT,probka TEXT,sha256 TEXT)",
+                    "CREATE TABLE zdarzenia(sciezka TEXT,rodzaj TEXT,opis TEXT)",
+                    "CREATE TABLE widok_folderow(sciezka TEXT PRIMARY KEY,rodzic TEXT,nazwa TEXT,rozmiar INTEGER,pliki INTEGER,podfoldery INTEGER,zmiana REAL,filmy INTEGER,zdjecia INTEGER,dokumenty INTEGER,archiwa INTEGER,inne INTEGER,duplikaty INTEGER,sygnal INTEGER,systemowy INTEGER,uwagi TEXT,ostatni_skan REAL)",
+                    "CREATE TABLE grupy_duplikatow(id INTEGER PRIMARY KEY,sha256 TEXT,rozmiar INTEGER,lokalizacje INTEGER,niezalezne INTEGER,zajete INTEGER,potencjal INTEGER,niepewne INTEGER)",
+                    "CREATE TABLE lokalizacje_duplikatow(grupa INTEGER,sciezka TEXT,folder TEXT)",
+                    "CREATE TABLE dyski(sciezka TEXT PRIMARY KEY,pojemnosc INTEGER,zajete INTEGER,wolne INTEGER)",
+                    "CREATE INDEX rozmiary ON pliki(rozmiar)",
+                    "CREATE INDEX probki ON pliki(rozmiar,probka)",
+                    "CREATE INDEX hashe ON pliki(rozmiar,sha256)",
+                    "CREATE INDEX folder_pliku ON pliki(folder)",
+                    "CREATE INDEX foldery_rodzic ON widok_folderow(rodzic,systemowy,rozmiar DESC)",
+                    "CREATE INDEX foldery_rozmiar ON widok_folderow(rozmiar DESC)",
+                    "CREATE INDEX foldery_filmy ON widok_folderow(filmy DESC)",
+                    "CREATE INDEX foldery_zdjecia ON widok_folderow(zdjecia DESC)",
+                    "CREATE INDEX foldery_sygnal ON widok_folderow(sygnal,rozmiar DESC)",
+                    "CREATE INDEX foldery_zmiana ON widok_folderow(zmiana DESC)",
+                    "CREATE INDEX duplikaty_potencjal ON grupy_duplikatow(potencjal DESC)",
+                    "CREATE INDEX lokalizacje_grupa ON lokalizacje_duplikatow(grupa)",
+                    "CREATE INDEX lokalizacje_sciezka ON lokalizacje_duplikatow(sciezka)"
+                })baza.Wykonaj(sql);
+                baza.Wykonaj("COMMIT");
+            }catch{baza.Wykonaj("ROLLBACK");throw;}
+        }
+    }
     IntPtr uchwyt;
     [DllImport("winsqlite3.dll", CallingConvention=CallingConvention.Cdecl)] static extern int sqlite3_open_v2(byte[] nazwa,out IntPtr baza,int flagi,IntPtr vfs);
     [DllImport("winsqlite3.dll", CallingConvention=CallingConvention.Cdecl)] static extern int sqlite3_close_v2(IntPtr baza);

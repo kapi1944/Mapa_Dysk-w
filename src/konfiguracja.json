@@ -1,0 +1,9 @@
+{
+  "plikBazy": "dane\\indeks.sqlite",
+  "rozmiarStrony": 200,
+  "duzyFolderGiB": 10,
+  "bardzoDuzyFolderGiB": 100,
+  "stareDaneDni": 730,
+  "domyslniePokazSystemowe": false,
+  "pelneHashePrzyOdswiezaniu": true
+}
