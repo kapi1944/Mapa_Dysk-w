@@ -41,3 +41,5 @@ Desktop.ini
 # Lokalne wydania
 MapaDyskow.exe
 MapaDyskow-Launcher.exe
+launcher/MapaDyskow-Launcher.exe.config
+launcher/ustawienia.json
