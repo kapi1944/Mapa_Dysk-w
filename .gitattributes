@@ -1,2 +1,19 @@
-# Auto detect text files and perform LF normalization
+# Git przechowuje tekst jako LF; checkout używa poniższych reguł.
+# Nie normalizuj masowo istniejących plików przy zmianie tych reguł.
 * text=auto
+*.cs text eol=crlf
+*.ps1 text eol=crlf
+*.xaml text eol=crlf
+*.config text eol=crlf
+*.manifest text eol=crlf
+*.py text eol=lf
+*.md text eol=lf
+*.json text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+*.exe binary
+*.dll binary
+*.pdb binary
+*.sqlite binary
+*.png binary
+*.jpg binary

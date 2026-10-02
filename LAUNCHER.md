@@ -38,7 +38,7 @@ Przy błędzie dostępne są „Uruchom ostatnią działającą”, „Pokaż lo
 
 Przy wyłączonej opcji launcher uruchamia ostatni poprawny Release. Jeśli go nie ma, informuje o błędzie. Po zmianie kodu samego launchera ponów `buduj-launcher.ps1`; launcher aktualizuje aplikację, a własny EXE budowany jest oddzielnie.
 
-Testy launchera (A: zero builda; B: publikacja i zachowanie danych; C: błąd kompilacji bez zmian Release; ustawienia; uruchomiony EXE; odzyskiwanie transakcji):
+Testy launchera: 7 scenariuszy (A: zero builda; B: publikacja i zachowanie danych; C: błąd kompilacji bez zmian Release; ustawienia; uruchomiony EXE; odzyskiwanie transakcji; GUI okna błędu ze zrzutem PNG):
 
 ```powershell
 .\launcher\testuj-launcher.ps1

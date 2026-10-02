@@ -1,4 +1,4 @@
-﻿# Buildy
+# Buildy
 build/
 bin/
 obj/
@@ -10,8 +10,13 @@ release/
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+*.sqlite-journal
+*.db
+*.db-shm
+*.db-wal
 dane/
 miniatury/
+wyglad.json
 
 # Logi i cache
 logs/
@@ -19,12 +24,15 @@ logs/
 cache/
 temp/
 tmp/
+__pycache__/
+*.py[cod]
 
 # Testowe artefakty
 testy/
 zrzuty/
 screenshots/
 TestResults/
+/analiza-statyczna.json
 
 # Pliki debug
 *.pdb

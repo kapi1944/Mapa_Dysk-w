@@ -77,3 +77,21 @@ Ręcznej oceny wymagają wygląd i czytelność zrzutów, układ przy różnych 
 płynność przewijania i skalowania na GPU oraz odczucia przy użyciu fizycznej
 myszy i klawiatury. Sztuczne pliki multimedialne nie potwierdzają obsługi
 wszystkich kodeków ani podglądów rzeczywistych filmów.
+
+## Launcher i smoke test
+
+`launcher\testuj-launcher.ps1` buduje launcher i wykonuje 7 scenariuszy na
+kopii źródeł w `build\testy-launchera`: brak zmian/zero builda, poprawną
+publikację, błąd kompilacji bez zmian Release, ustawienia, ochronę działającego
+EXE, odzyskiwanie transakcji oraz GUI okna błędu. Szczegóły: [LAUNCHER.md](LAUNCHER.md).
+
+`src\smoke-test.ps1` sprawdza świeży build, puste katalogi i indeks, otwarcie
+okna, ponowny start, pierwszy skan sztucznego folderu i zachowanie danych po
+rebuildzie. Wynik zapisuje w `build\smoke-<id>\wynik.json`.
+
+Testy GUI najlepiej uruchamiać kolejno w tej samej sesji pulpitu. Podczas audytu
+2026-10-02 smoke uruchomiony równolegle z testami launchera raz przekroczył
+5 sekund na zamknięcie własnego okna. Ponowne samodzielne uruchomienie przeszło;
+przyczyna timeoutu nie została potwierdzona. Jeśli błąd wróci, zachowaj katalog
+próby i sprawdź zamykanie okna ręcznie. Nie traktuj wymuszonego zakończenia jako
+poprawnego zamknięcia aplikacji.

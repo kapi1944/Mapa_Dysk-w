@@ -187,4 +187,3 @@ return wynik;}});if(aktualna!=wersja)return;lista.ItemsSource=dane.Take(200).ToL
     public void WczytajDoTestu(){OknoGlowne.Oczekuj(()=>zaladowane>=2);}
 }
 }
-
