@@ -1,0 +1,43 @@
+﻿# Buildy
+build/
+bin/
+obj/
+Debug/
+Release/
+release/
+
+# Dane runtime / indeksy
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+dane/
+miniatury/
+
+# Logi i cache
+logs/
+*.log
+cache/
+temp/
+tmp/
+
+# Testowe artefakty
+testy/
+zrzuty/
+screenshots/
+TestResults/
+
+# Pliki debug
+*.pdb
+
+# IDE / system
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+Thumbs.db
+Desktop.ini
+
+# Lokalne wydania
+MapaDyskow.exe
+MapaDyskow-Launcher.exe
