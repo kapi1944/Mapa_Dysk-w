@@ -2,15 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace MapaDyskow {
 public static class EksploratorFolderow {
-    public static List<Wiersz> Odczytaj(Baza baza,string sciezka){
+    public static List<Wiersz> Odczytaj(Baza baza,string sciezka,CancellationToken token=default(CancellationToken)){
+        token.ThrowIfCancellationRequested();
         var indeks=baza.Zapytaj("SELECT "+Program.KolumnyFolderu+" FROM widok_folderow WHERE rodzic=?",sciezka).Select(Program.Folder).ToDictionary(w=>w.Sciezka,StringComparer.OrdinalIgnoreCase);
         foreach(var plik in baza.Zapytaj("SELECT sciezka,rozmiar,zmiana,typ,sha256 FROM pliki WHERE folder=?",sciezka).Select(Program.Plik))indeks[plik.Sciezka]=plik;
         var wynik=new List<Wiersz>();
         // Wyłącznie bezpośrednie elementy. Indeks nigdy nie decyduje o ich widoczności.
         foreach(var wpis in new DirectoryInfo(sciezka).EnumerateFileSystemInfos()){
+            token.ThrowIfCancellationRequested();
             bool folder=wpis is DirectoryInfo;Wiersz element;
             if(!indeks.TryGetValue(wpis.FullName,out element)||element.Rodzaj!=(folder?"folder":"plik"))element=new Wiersz {Rodzaj=folder?"folder":"plik",Rozmiar=folder?-1:0,Pliki=-1,Podfoldery=-1,Oznaczenia="Nieprzeanalizowany"};
             element.Sciezka=wpis.FullName;element.Nazwa=wpis.Name;

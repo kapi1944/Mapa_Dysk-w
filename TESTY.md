@@ -33,12 +33,45 @@ do nowej próby. Nie kopiuje istniejącego indeksu, ustawień ani cache.
 Konfiguracja testowa pochodzi z `src\konfiguracja.json`. Wszystkie skany,
 hashe, hardlinki, zmiany nazw i tworzenie folderów dotyczą sztucznych danych.
 
-Zestaw obejmuje 11 raportowanych grup: skaner, SHA-256 i duplikaty,
+Zestaw obejmuje 12 raportowanych grup: skaner, SHA-256 i duplikaty,
 hardlinki, anulowanie i rollback, cache miniaturek, agregację folderów,
 ochronę źródeł, sortowanie, operacje plikowe, historię Back/Forward oraz WPF.
 WPF sprawdza m.in. F5, rename, ikony i Szczegóły, Ctrl+scroll, zaznaczenie,
 kolumny oraz wirtualizację 100000 modeli. Runner sprawdza też obecność
-27 zrzutów PNG i 2 raportów tekstowych na konfigurację.
+33 zrzutów PNG i 2 raportów tekstowych na konfigurację.
+
+## Eksplorator i Panel informacji
+
+Audyt przed dokończeniem: odczyt folderu z systemu plików, F5 bez rekursji,
+analityka SQLite, ON/OFF, X, separator, zapis szerokości i sekcji oraz
+metadane Windows/EXIF były już zaimplementowane. Async/cache i synchronizacja
+zaznaczenia wymagały dokończenia; brakowało testów panelu i danych spoza indeksu.
+
+Normalny folder pokazuje bezpośrednie elementy systemu plików, z istniejącym
+filtrem i stronicowaniem. F5 ponownie odczytuje bieżący folder, nie zmienia
+historycznej bazy i nie uruchamia skanera ani hashowania. Rozmiary rekursywne,
+tagi i duplikaty pozostają danymi analitycznymi z indeksu.
+
+Panel działa w Szczegółach i Ikonach. Menu Wyświetl przełącza ON/OFF, X zamyka,
+separator zmienia szerokość; szerokość i stan sekcji są zapisane w wyglad.json.
+Przycisk Informacje o folderze pokazuje dane bieżącego folderu, a w katalogu
+głównym dysku także pojemność, wolne/zajęte, system plików i etykietę.
+Informacje o zawartości folderu są odczytywane bez rekursji; największe pliki
+obejmują także elementy spoza indeksu.
+
+Panel odczytuje droższe metadane tylko dla zaznaczonego pliku. Dwa zadania
+mogą pracować równolegle. Zmiana zaznaczenia anuluje oczekiwanie i kolejkę;
+spóźnione wyniki nie aktualizują panelu. Trwające wywołanie natywnego handlera
+Windows może dokończyć się w tle. Cache uwzględnia ścieżkę, rozmiar i dokładną
+datę modyfikacji. EXIF jest pobierany po zaznaczeniu, dokumenty używają lekkich
+właściwości Windows, bez dodawania parserów Office. Dostępność FPS, bitrate,
+kodeków, profili i tagów zależy od pliku i zainstalowanych handlerów Windows.
+
+Testy używają własnych PNG/JPEG z EXIF, poprawnego AVI RGB24 i WAV PCM.
+Sprawdzają F5 i pliki/foldery spoza indeksu, brak skanu i zmian bazy,
+Szczegóły/Ikony, prawdziwe zdarzenia GridSplitter, pamięć szerokości/sekcji,
+multi-select, metadane zdjęcia/filmu/audio, cache i jego unieważnianie,
+anulowanie oraz brak dodatkowego hashowania. Zrzuty panelu mają numery 30–35.
 
 Ręcznej oceny wymagają wygląd i czytelność zrzutów, układ przy różnych DPI,
 płynność przewijania i skalowania na GPU oraz odczucia przy użyciu fizycznej

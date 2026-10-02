@@ -26,9 +26,9 @@ public static class MetadaneWindows {
     [DllImport("ole32.dll",EntryPoint="CoInitializeEx")]static extern int UruchomCom(IntPtr zarezerwowane,uint tryb);
     [DllImport("ole32.dll",EntryPoint="CoUninitialize")]static extern void ZakonczCom();
     [DllImport("propsys.dll",EntryPoint="PSFormatForDisplayAlloc",CharSet=CharSet.Unicode)]static extern int FormatujWlasciwosc(ref KluczWlasciwosci klucz,ref WartoscWlasciwosci wartosc,int flagi,out IntPtr tekst);
-    public static System.Collections.Generic.Dictionary<string,string> PobierzRozszerzone(string sciezka){
+    public static System.Collections.Generic.Dictionary<string,string> PobierzRozszerzone(string sciezka,bool lekkie=false){
         var wynik=new System.Collections.Generic.Dictionary<string,string>();MagazynWlasciwosci magazyn=null;int com=UruchomCom(IntPtr.Zero,0);
-        try{Guid id=typeof(MagazynWlasciwosci).GUID;if(OtworzWlasciwosci(sciezka,IntPtr.Zero,0x40,ref id,out magazyn)<0||magazyn==null)return wynik;
+        try{Guid id=typeof(MagazynWlasciwosci).GUID;if(OtworzWlasciwosci(sciezka,IntPtr.Zero,lekkie?0x48:0x40,ref id,out magazyn)<0||magazyn==null)return wynik;
             string[,] pola={
                 {"System.Image.HorizontalSize","Szerokość"},{"System.Image.VerticalSize","Wysokość"},{"System.Image.BitDepth","Głębia kolorów"},{"System.Photo.Orientation","Orientacja"},{"System.Image.ColorSpace","Przestrzeń kolorów"},
                 {"System.Photo.CameraManufacturer","EXIF · Producent aparatu"},{"System.Photo.CameraModel","EXIF · Model aparatu"},{"System.Photo.DateTaken","EXIF · Data wykonania"},{"System.Photo.FocalLength","EXIF · Ogniskowa"},{"System.Photo.ISOSpeed","EXIF · ISO"},{"System.Photo.ExposureTime","EXIF · Czas ekspozycji"},{"System.Photo.FNumber","EXIF · Przysłona"},

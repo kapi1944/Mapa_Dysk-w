@@ -13,6 +13,7 @@ using Microsoft.Win32.SafeHandles;
 namespace MapaDyskow {
 public static class Skaner {
     internal static long LiczbaHashowan;
+    internal static long LiczbaSkanow;
     [StructLayout(LayoutKind.Sequential)] struct IdPliku {public ulong Wolumin;public ulong Dolna;public ulong Gorna;}
     [DllImport("kernel32.dll",CharSet=CharSet.Unicode,SetLastError=true)] static extern SafeFileHandle CreateFile(string nazwa,uint dostep,uint wspoldzielenie,IntPtr zabezpieczenia,uint utworzenie,uint flagi,IntPtr szablon);
     [DllImport("kernel32.dll",SetLastError=true)] static extern bool GetFileInformationByHandleEx(SafeFileHandle uchwyt,int klasa,out IdPliku dane,uint rozmiar);
@@ -26,6 +27,7 @@ public static class Skaner {
     static string ObliczSkrot(string sciezka,CancellationToken token){LiczbaHashowan++;if(!Regex.IsMatch(sciezka,@"^[a-zA-Z]:\\"))throw new IOException("Wymagana jest lokalna ścieżka pliku.");using(var skrot=SHA256.Create())using(var plik=new FileStream(sciezka,FileMode.Open,FileAccess.Read,FileShare.ReadWrite|FileShare.Delete,1024*1024,FileOptions.SequentialScan)){byte[] bufor=new byte[1024*1024];int odczyt;while((odczyt=plik.Read(bufor,0,bufor.Length))>0){token.ThrowIfCancellationRequested();skrot.TransformBlock(bufor,0,odczyt,null,0);}skrot.TransformFinalBlock(new byte[0],0,0);return BitConverter.ToString(skrot.Hash).Replace("-","").ToLowerInvariant();}}
     static void Zdarzenie(Baza baza,string sciezka,string rodzaj,string opis){baza.Wykonaj("INSERT INTO zdarzenia VALUES(?,?,?)",sciezka,rodzaj,opis);}
     public static string Skanuj(string podanyKorzen,bool hashe,CancellationToken token,Action<string> postep){
+        Interlocked.Increment(ref LiczbaSkanow);
         string korzen=Path.GetFullPath(podanyKorzen);if(!Regex.IsMatch(korzen,@"^[a-zA-Z]:\\"))throw new IOException("Obsługiwane są lokalne ścieżki dysków Windows.");if(korzen.Length>3)korzen=korzen.TrimEnd('\\');if(!Directory.Exists(korzen))throw new IOException("Folder nie istnieje lub dysk jest niedostępny.");
         if(WZakresie(korzen,Program.Katalog.TrimEnd('\\'))||korzen.Equals(Program.KatalogAudytu.TrimEnd('\\'),StringComparison.OrdinalIgnoreCase))throw new IOException("Katalog aplikacji i wyników audytu jest wyłączony, aby nie indeksować własnej bazy.");
         if(((int)File.GetAttributes(korzen)&(0x400|0x1000|0x40000|0x400000))!=0)throw new IOException("Nie skanuję dowiązań ani folderów wymagających pobrania z chmury.");

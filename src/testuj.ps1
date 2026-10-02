@@ -40,7 +40,7 @@ $bazaTestowa=[IO.Path]::GetFullPath($fixture.baza)
 if(-not $bazaTestowa.StartsWith($katalogProby.TrimEnd('\')+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Baza testowa znajduje się poza izolowanym katalogiem.'}
 Copy-Item -LiteralPath $bazaTestowa -Destination (Join-Path $katalogAplikacji 'dane\indeks.sqlite')
 $katalogZrzutowOperacji=Join-Path (Split-Path -Parent $bazaTestowa) '..\zrzuty-operacji'
-foreach($nazwa in @('11-nawigacja.png','12-nowy-folder-inline.png','13-rename-inline.png','14-scroll-przed.png','14-scroll-po.png','14-scroll-back.png','15-ostrzezenie-rozszerzenie.png','16-rename-kafelek.png','20-ikony-100.png','21-ikony-105.png','22-ikony-70.png','22-ikony-75.png','22-ikony-90.png','22-ikony-110.png','22-ikony-140.png','23-szczegoly.png','24-szczegoly-sortowanie.png','test-widokow.txt')){
+foreach($nazwa in @('11-nawigacja.png','12-nowy-folder-inline.png','13-rename-inline.png','14-scroll-przed.png','14-scroll-po.png','14-scroll-back.png','15-ostrzezenie-rozszerzenie.png','16-rename-kafelek.png','20-ikony-100.png','21-ikony-105.png','22-ikony-70.png','22-ikony-75.png','22-ikony-90.png','22-ikony-110.png','22-ikony-140.png','23-szczegoly.png','24-szczegoly-sortowanie.png','30-panel-zdjecie-szczegoly.png','31-panel-zdjecie-ikony.png','32-panel-film.png','33-panel-multi-select.png','34-panel-resize.png','35-panel-folder.png','test-widokow.txt')){
     if(-not (Test-Path -LiteralPath (Join-Path $katalogZrzutowOperacji $nazwa))){throw ('Brakuje materiału WPF: '+$nazwa)}
 }
 Uruchom-Test @('--test')
