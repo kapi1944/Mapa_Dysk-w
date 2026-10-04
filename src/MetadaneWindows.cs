@@ -6,6 +6,12 @@ using System.Windows.Media.Imaging;
 
 namespace MapaDyskow {
 public static class MetadaneWindows {
+    public static BitmapSource PobierzIkone(string sciezka,int rozmiar){
+        FabrykaObrazow fabryka=null;IntPtr bitmapa=IntPtr.Zero;
+        try{Guid id=typeof(FabrykaObrazow).GUID;if(UtworzElement(sciezka,IntPtr.Zero,ref id,out fabryka)<0||fabryka==null||fabryka.PobierzObraz(new RozmiarObrazu {Szerokosc=rozmiar,Wysokosc=rozmiar},0x104,out bitmapa)<0||bitmapa==IntPtr.Zero)return null;
+            var obraz=Imaging.CreateBitmapSourceFromHBitmap(bitmapa,IntPtr.Zero,Int32Rect.Empty,BitmapSizeOptions.FromEmptyOptions());obraz.Freeze();return obraz;
+        }catch(COMException){return null;}finally{if(bitmapa!=IntPtr.Zero)ZwolnijBitmapę(bitmapa);if(fabryka!=null)Marshal.ReleaseComObject(fabryka);}
+    }
     [StructLayout(LayoutKind.Sequential)] struct RozmiarObrazu {public int Szerokosc,Wysokosc;}
     [StructLayout(LayoutKind.Sequential,Pack=4)] struct KluczWlasciwosci {public Guid Format;public uint Id;}
     [StructLayout(LayoutKind.Explicit,Size=24)] struct WartoscWlasciwosci {[FieldOffset(0)]public ushort Typ;[FieldOffset(8)]public ulong Liczba;[FieldOffset(8)]public uint MalaLiczba;[FieldOffset(8)]public int Calkowita;[FieldOffset(8)]public long Dluga;}

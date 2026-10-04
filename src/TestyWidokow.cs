@@ -49,6 +49,7 @@ public sealed partial class OknoGlowne {
         var stanUkladu=Program.Json.Deserialize<Wyglad>(File.ReadAllText(Path.Combine(Program.Katalog,"wyglad.json")));TestyOperacji.Wymagaj(stanUkladu.UkladyFolderow[KluczWidoku()].Sortowanie=="Nazwa"&&stanUkladu.UkladyFolderow[KluczWidoku()].Malejaco==ukladBiezacy.Malejaco,"Trwałość sortowania folderu");
         using(var baza=new Baza(Program.Indeks,false)){var wszystkie=ZawartoscFolderu(baza,folder,"",true,1000,0);var pierwsza=ZawartoscFolderu(baza,folder,"",true,20,0);var druga=ZawartoscFolderu(baza,folder,"",true,20,20);TestyOperacji.Wymagaj(pierwsza.Concat(druga).Select(w=>w.Sciezka).SequenceEqual(wszystkie.Take(40).Select(w=>w.Sciezka)),"Sortowanie przed podziałem na strony");}
         Renderuj(Okno,Path.Combine(zrzuty,"24-szczegoly-sortowanie.png"));
+        TestujIkony(zrzuty);
     }
 }
 }
