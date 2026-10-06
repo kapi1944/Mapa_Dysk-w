@@ -56,7 +56,7 @@ public static class Program {
     public static JavaScriptSerializer Json=new JavaScriptSerializer {MaxJsonLength=int.MaxValue};
     public static readonly string KolumnyFolderu="sciezka,nazwa,rozmiar,pliki,podfoldery,zmiana,filmy,zdjecia,dokumenty,archiwa,inne,duplikaty,sygnal,systemowy,uwagi";
     public static readonly DateTime Epoka=new DateTime(1970,1,1,0,0,0,DateTimeKind.Utc);
-    public static string Rozmiar(long liczba){if(liczba<0)return "Nie przeskanowano";string[] jednostki={"B","KiB","MiB","GiB","TiB"};double wartosc=liczba;int i=0;while(wartosc>=1024&&i<4){wartosc/=1024;i++;}return wartosc.ToString(i==0?"N0":"N2")+" "+jednostki[i];}
+    public static string Rozmiar(long liczba){if(liczba<0)return "Nie przeskanowano";string[] jednostki={"B","KB","MB","GB","TB"};double wartosc=liczba;int i=0;while(wartosc>=1024&&i<4){wartosc/=1024;i++;}return wartosc.ToString(i==0?"N0":"N2")+" "+jednostki[i];}
     public static string Data(double czas){return czas<=0?"Brak danych":Epoka.AddSeconds(czas).ToLocalTime().ToString("yyyy-MM-dd HH:mm");}
     public static string Prefiks(string sciezka){return sciezka.TrimEnd('\\').Replace("^","^^").Replace("%","^%").Replace("_","^_")+"\\%";}
     public static Brush Kolor(string kolor){return (Brush)new BrushConverter().ConvertFromString(kolor);}
